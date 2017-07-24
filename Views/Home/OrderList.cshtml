@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Заявки";
+}
+<div>
+    @ViewBag.Message
+</div>
+<h2>Управление заявками - Роль диспетчера</h2>
+<img src="~/Images/M_Add.gif" alt="" /> <a href="/Home/NewOrder/">Добавить заявку</a> &nbsp; | &nbsp; <a href="?refresh=refresh">Обновить</a><br />
+<br />
+
+<table width="100%">
+    <tr>
+        <td><strong>ID</strong></td>
+        <td><strong>Статус</strong></td>
+        <td><strong>Время подачи</strong></td>
+        <td><strong>Имя клиента</strong></td>
+        <td><strong>Тел клиента</strong></td>
+        <td><strong>Адрес от</strong></td>
+        <td><strong>Адрес куда</strong></td>
+        <td><strong>Доп</strong></td>
+        <!-- -->
+        <td><strong>Цена</strong></td>
+        <td><strong>Водитель</strong></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <form method="get">
+                @Html.DropDownList("filter", ViewBag.fil as SelectList)
+                <input type="submit" value=">" />
+            </form>
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+            <form method="get">
+                <input type="text" name="utel" value="@ViewBag.tel" size="10" maxlength="16" />
+                <input type="submit" value=">" />
+            </form>
+        </td>
+        <td></td>
+        <td></td>
+        <!-- -->
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var b in ViewBag.Orders)
+    {
+        <tr class="stat-@b.OrderStatusID">
+            <td>#@b.OrderID</td>
+           
+            <td>@ViewBag.st.Find(b.OrderStatusID).StatusName</td>
+            <td>@b.UserTime.ToString().Replace(".2017","")</td>
+            <td>@b.UserName</td>
+            <td>@b.UserTel</td>
+            <td>@b.Address1</td>
+            <td>@b.Address2</td>
+            <td>@b.Dop</td>
+            <!-- -->
+            <td>@b.Price</td>
+            <td>@if (b.DriverID != null && b.DriverID>0)
+            {
+                @b.Driver.DriverName
+                if (b.OrderStatusID == 2)
+                {
+                    <span>?</span>
+                }
+            }
+            </td>
+            <td>
+                <img src="~/Images/M_Set.gif" alt="" /> @Html.ActionLink("Edit", "OrderEdit", new { id = b.OrderID }) <br/>
+                <img src="~/Images/M_Del.png" alt="" /> @Html.ActionLink("Del", "OrderConfirm", new { id = b.OrderID })
+            </td>
+        </tr>
+    }
+</table>
+
+<br /><br />
+<address>
+    <strong>Тех поддержка:</strong>   <a href="mailto:KaprovOleg@mail.ru">KaprovOleg@mail.ru</a><br />
+</address>

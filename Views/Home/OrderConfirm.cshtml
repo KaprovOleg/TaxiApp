@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Удаление заявки";
+}
+<h2>Вы точно уверены ??</h2>
+<form method="post" action="/Home/OrderDelete/">
+    <input type="hidden" name="id" value="@ViewBag.Id" />
+    <div>
+        Удалить @ViewBag.Message ?
+    </div>
+    <br/>
+    <input type="submit" name="del" value="Удалить!" class="btn btn-default" />
+    <input type="button" name="no" value="Нет" onclick="history.back()" class="btn btn-default" />
+</form>
+
+

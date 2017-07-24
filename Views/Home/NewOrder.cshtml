@@ -1,0 +1,87 @@
+﻿@model TaxiApp.Models.Order
+
+@{
+    ViewBag.Title = "Новая заявка";
+}
+
+<h2>Заявка на подачу такси</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserTel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserTel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserTel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                <p>Город, улица, дом</p> <!-- Карта + не подать в другом городе // Для федеральных сетей - выбор города -->
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                <p>Город, улица, дом</p> <!-- Карта + не подать в другом городе // Для федеральных сетей - выбор города -->
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserTime_", ViewBag.t as SelectList)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Dop, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @foreach (var d1 in ViewBag.dop)
+                {
+                <input type="checkbox" name="Dop" value="@d1" /> @d1
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="hidden" name="OrderStatusID" value="1" />
+                @Html.ValidationMessageFor(model => model.OrderStatusID, "", new { @class = "text-danger" })
+                <input type="submit" value="Заказать" class="btn btn-default" onclick="document.getElementById('wait').style.display = 'block';" />
+                <input type="button" name="no" value="Отмена" onclick="history.back()" class="btn btn-default" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="wait" class="col-md-offset-2 col-md-10" style="display:none;">
+                <!-- При отправке письма сервак задумался секунд на 5-10, выведем ожидание -->
+                <!-- PS Если нажал заказать а форма не валидна - не надо показывать это -->
+                <img src="~/Images/wait_64.gif" alt="Минуточку..." /> Минуточку... Мы ищем для Вас свободную машину....
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

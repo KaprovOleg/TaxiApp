@@ -1,0 +1,171 @@
+﻿@model TaxiApp.Models.Driver
+
+@{
+    ViewBag.Title = "Редактирование автомобиля/водителя";
+}
+
+<h2>Изменение данных автомобиля/водителя</h2>
+
+<script type="text/javascript" language="javascript">
+    // AJAX XMLHttpRequest
+    var XMLHttp = null;
+    var xmlDoc = '';
+    try {
+        XMLHttp = new XMLHttpRequest();
+    } catch (trymicrosoft) {
+        try {
+            XMLHttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (othermicrosoft) {
+            try {
+                XMLHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (failed) {
+                XMLHttp = null;
+            }
+        }
+    }
+    if (XMLHttp == null) {
+        alert('error initialization XMLHttp');
+    }
+    //
+    function setGPS() {
+        if (XMLHttp.readyState == 4) {
+            // alert('ok XMLHttp State');
+            xmlDoc = "" + XMLHttp.responseText;
+            loc = xmlDoc.indexOf("geometry");
+            if ((xmlDoc.length > 0) && (loc > 0)) {
+                //
+                xmlDoc = xmlDoc.substr(loc);
+                loc = xmlDoc.indexOf("location");
+                xmlDoc = xmlDoc.substr(loc);
+                //
+                loc = xmlDoc.indexOf("{");
+                loc2 = xmlDoc.indexOf("}");
+                xmlDoc = xmlDoc.substring(loc, loc2 + 1); // { .. }
+                //
+                var cart = JSON.parse(xmlDoc);
+                // может быть глюк если длинной число - 53.52867999999999
+                var lat = "" + cart.lat;
+                var lng = "" + cart.lng;
+                lat = lat.replace(".", ",");
+                lng = lng.replace(".", ",");
+                if (lat.length > 10) lat = lat.substring(0, 10);
+                if (lng.length > 10) lng = lng.substring(0, 10);
+                document.getElementById("mapX53").value = lat;
+                document.getElementById("mapY49").value = lng;
+            }
+        }
+    }
+    function getGPS() {
+        var cnam = 'Тольяти '; // Если не указали город а только улицу и дом
+        var adr = "" + document.getElementById("mapStayAdr").value;
+        if (adr.length > 1) {
+            adr = "" + cnam + " " + adr;
+            adr = adr.replace(" ", "%20").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20").replace(" ", "%20");
+            //
+            XMLHttp.open('GET', 'http://maps.googleapis.com/maps/api/geocode/json?address=' + adr + '&sensor=false&language=ru', true);
+            XMLHttp.onreadystatechange = setGPS;
+            XMLHttp.send(null);
+        }
+    }
+
+</script>
+
+@using (Html.BeginForm("EditDriver","Home",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.DriverID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DriverName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DriverName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DriverName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DriverTel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DriverTel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DriverTel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AutoModel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AutoModel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AutoModel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AutoNomer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AutoNomer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AutoNomer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AutoYear, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AutoYear, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AutoYear, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mapStayAdr, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.mapStayAdr, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.mapStayAdr, "", new { @class = "text-danger" })
+                <br /><input type="button" name="GPS" value="Найти координаты GPS" onclick="getGPS()" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mapX53, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("mapX53", Model.mapX53, new { htmlAttributes = new { @onfocus = "this.blur()" } })
+                @Html.ValidationMessageFor(model => model.mapX53, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mapY49, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("mapY49", Model.mapY49, new { htmlAttributes = new { @onfocus = "this.blur()" } })
+                @Html.ValidationMessageFor(model => model.mapY49, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Статус:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("DriverStatusID", ViewBag.s as SelectList)
+                @Html.ValidationMessageFor(model => model.DriverStatusID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.AppUserID)
+        @Html.HiddenFor(model => model.UserIP)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="button" name="no" value="Отмена" onclick="history.back()" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "История заявок клиента";
+}
+<div>
+    @ViewBag.Message
+</div>
+<h2>Просмотр заявок - Роль пользователя</h2>
+
+<form method="get" name="dr" id="dr">
+    Телефон клиента: <input type="text" name="utel" value="@ViewBag.utel" /> <input type="submit" name="list" value="Выбрать" />
+</form>
+<br />
+
+<table width="100%">
+    <tr>
+        <td><strong>ID</strong></td>
+        <td><strong>Статус</strong></td>
+        <td><strong>Время подачи</strong></td>
+        <td><strong>Имя клиента</strong></td>
+        <td><strong>Тел клиента</strong></td>
+        <td><strong>Адрес от</strong></td>
+        <td><strong>Адрес куда</strong></td>
+        <!-- -->
+        <td><strong>Цена</strong></td>
+        <td><strong>Водитель</strong></td>
+        <td><strong>Автомобиль</strong></td>
+    </tr>
+    @if (ViewBag.utel != null && ViewBag.utel != "")
+    {
+        foreach (var b in ViewBag.Orders)
+        {
+            <tr class="stat-@b.OrderStatusID">
+                <td>#@b.OrderID</td>
+                <td>@b.OrderStatus.StatusName</td>
+                <td>@b.UserTime.ToString().Replace(".2017", "")</td>
+                <td>@b.UserName</td>
+                <td>@b.UserTel</td>
+                <td>@b.Address1</td>
+                <td>@b.Address2</td>
+                <!-- -->
+                <td>@b.Price</td>
+                @if (b.DriverID != null && b.DriverID > 0)
+                {
+                <td>@b.Driver.DriverName</td>
+                <td>@b.Driver.AutoModel @b.Driver.AutoNomer</td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        }
+    }
+</table>
+
+<br />

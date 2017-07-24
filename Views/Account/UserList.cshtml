@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Управление пользователями";
+}
+<div>
+    @ViewBag.Message
+</div>
+<h2>Управление пользователями</h2>
+<img src="~/Images/M_Add.gif" alt="" /> <a href="/Account/Register/">Добавить нового пользователя</a><br />
+<br />
+
+<table width="100%">
+    <tr>
+        <td><strong>ID</strong></td>
+        <td><strong>Имя</strong></td>
+        <td><strong>Email</strong></td>
+        <td><strong>Телефон</strong></td>
+        <td><strong>Последний вход</strong></td>
+        <td><strong>Ошибок</strong></td>
+        <td><strong>RoleID</strong></td>
+        <td><strong>Роль</strong></td>
+        <td></td>
+    </tr>
+    @foreach (var b in ViewBag.users)
+    {
+        <tr class="role-@b.AppUserRoleID">
+            <td>#@b.ID</td>
+            <td>@b.UserName</td>
+            <td>@b.Email</td>
+            <td>@b.Phone</td>
+            <td>@b.LastLogin</td>
+            <td>@b.FailCount</td>
+            <td>@b.AppUserRoleID</td>
+            <!-- -->
+            <td>
+                @if (b.AppUserRoleID != null && b.AppUserRoleID > 0)
+                {
+                @b.AppUserRole.Name
+                }
+        </td>
+        <td>
+            <img src="~/Images/M_Set.gif" alt="" /> @Html.ActionLink("Edit", "UserEdit", new { id = b.ID }) <br />
+            <img src="~/Images/M_Del.png" alt="" /> @Html.ActionLink("Del", "UserConfirm", new { id = b.ID })
+        </td>
+    </tr>
+    }
+</table>
+
+<br /><br />
+<address>
+    <strong>Тех поддержка:</strong>   <a href="mailto:KaprovOleg@mail.ru">KaprovOleg@mail.ru</a><br />
+</address>

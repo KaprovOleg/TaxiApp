@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "Заявки для водителя";
+}
+<div>
+    @ViewBag.Message
+</div>
+<h2>Управление заявками - Роль водителя</h2>
+
+<script type="text/javascript" language="javascript">
+    function fok(id) {
+        document.getElementById("okid").value = id;
+        document.forms["dr"].submit();
+    }
+    function fcancel(id) {
+        document.getElementById("cid").value = id;
+        document.forms["dr"].submit();
+    }
+    function part(no) {
+        document.getElementById("part"+(3-no)).style.display = "none";
+        document.getElementById("part"+no).style.display = "block";
+    }
+</script>
+
+<form method="get" name="dr" id="dr">
+    <input type="hidden" name="cid" id="cid" value="0" />
+    <input type="hidden" name="okid" id="okid" value="0" />
+    Телефон водителя: <input type="text" name="utel" value="@ViewBag.utel" /> <input type="submit" name="list" value="Выбрать" />
+</form>
+<br />
+<input type="button" name="part1" value="Актуальные заявки" class="btn btn-default" onclick="part(1)" />
+<input type="button" name="part2" value="История всех заявок" class="btn btn-default" onclick="part(2)" />
+<br /><br />
+
+
+
+<div id="part1">
+    <form method="get">
+        <table width="100%">
+            <tr>
+                <td><strong>ID</strong></td>
+                <td><strong>Статус</strong></td>
+                <td><strong>Время подачи</strong></td>
+                <td><strong>Имя клиента</strong></td>
+                <td><strong>Тел клиента</strong></td>
+                <td><strong>Адрес от</strong></td>
+                <td><strong>Адрес куда</strong></td>
+                <!-- -->
+                <td><strong>Цена</strong></td>
+                <td><strong>Водитель</strong></td>
+                <td></td>
+            </tr>
+            @if (ViewBag.DriverID > 0)
+            {
+                int i = 0;
+                foreach (var b in ViewBag.Orders)
+                {
+                    <tr class="stat-@b.OrderStatusID">
+                        <td>#@b.OrderID</td>
+                        <td>
+                            @if (b.OrderStatusID > 2 && i == 0)
+                            {
+                                i++;
+                                // Только у 1 заявки которая статус принята и выше будем давать менять статус по шагам дальше - тут в этой таблице / форме
+                                <input type="hidden" name="setid" value="@b.OrderID" />
+                                <input type="hidden" name="utel" value="@ViewBag.utel" />
+                                <select size="1" name="NewStatusID">
+                                    @foreach (var op in ViewBag.st)
+                                    {
+                                        if (op.ID == b.OrderStatusID)
+                                        {
+                                            <option selected="selected" value="@op.ID">@op.StatusName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@op.ID">@op.StatusName</option>
+                                        }
+                                    }
+                                </select>
+                                <input type="submit" name="set" value=">" />
+                            }
+                            else
+                            {
+                                @b.OrderStatus.StatusName
+                            }
+                        </td>
+                        <!-- -->
+                        <td>@b.UserTime.ToString().Replace(".2017", "")</td>
+                        <td>@b.UserName</td>
+                        <td>@b.UserTel</td>
+                        <td>@b.Address1</td>
+                        <td>@b.Address2</td>
+                        <!-- -->
+                        <td>@b.Price</td>
+                        <td>
+                            @if (b.DriverID != null && b.DriverID > 0)
+                            {
+                                @ViewBag.DriverName
+                                if (b.OrderStatusID == 2)
+                                {
+                                    <span>
+                                        ?
+                                        <a href="javascript:fok(@b.OrderID)" class="ook">Принять</a> |
+                                        <a href="javascript:fcancel(@b.OrderID)" class="can"> Отказаться </a>
+                                    </span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </form>
+    <br />
+</div>
+
+<div id="part2" style="display:none;">
+    <table width="100%">
+        <tr>
+            <td><strong>ID</strong></td>
+            <td><strong>Статус</strong></td>
+            <td><strong>Время подачи</strong></td>
+            <td><strong>Имя клиента</strong></td>
+            <td><strong>Тел клиента</strong></td>
+            <td><strong>Адрес от</strong></td>
+            <td><strong>Адрес куда</strong></td>
+            <!-- -->
+            <td><strong>Цена</strong></td>
+            <td><strong>Водитель</strong></td>
+        </tr>
+        @if (ViewBag.DriverID > 0)
+        {
+            foreach (var b in ViewBag.OrdersF)
+            {
+                <tr class="stat-@b.OrderStatusID">
+                    <td>#@b.OrderID</td>
+                    <td>@b.OrderStatus.StatusName</td>
+                    <td>@b.UserTime.ToString().Replace(".2017", "")</td>
+                    <td>@b.UserName</td>
+                    <td>@b.UserTel</td>
+                    <td>@b.Address1</td>
+                    <td>@b.Address2</td>
+                    <!-- -->
+                    <td>@b.Price</td>
+                    <td>
+                        @if (b.DriverID != null && b.DriverID > 0)
+                    {
+                            @ViewBag.DriverName
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<br /><br />
+<address>
+    <strong>Тех поддержка:</strong>   <a href="mailto:KaprovOleg@mail.ru">KaprovOleg@mail.ru</a><br />
+</address>

@@ -1,0 +1,83 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.err 
+{
+    text-align: left;
+    color: red;
+    display: none;
+}
+.st-0 {
+    color: grey;
+}
+.st-1 {
+    color: grey;
+}
+.st-2 {
+    color: green;
+}
+.st-3 {
+    color: blue;
+}
+.st-1 td, .st-2 td, .st-3 td, .st-0 td {
+    border-top: solid 1px #ddd;
+    padding: 3px 5px;
+}
+.stat-1 {
+    color: red;
+}
+.stat-2 {
+    color: blue;
+}
+.stat-5 {
+    color: green;
+}
+.stat-6 {
+    color: grey;
+}
+.stat-1 td, .stat-2 td, .stat-3 td, .stat-0 td, .stat-4 td, .stat-5 td, .stat-6 td {
+    border-top: solid 1px #ddd;
+    padding: 3px 5px;
+}
+.stat-2 td span {
+    color: red;
+}
+.ook{
+    color:green;
+}
+.can  {
+    color:red;
+}
+.role-1, .role-2 {
+}
+.role-3 {
+    color: green;
+}
+.role-4 {
+    color: blue;
+}
+    .role-1 td, .role-2 td, .role-3 td, .role-4 td {
+        border-top: solid 1px #ddd;
+        padding: 3px 5px;
+    }
