@@ -52,8 +52,15 @@ namespace TaxiApp.Models
         [DataType(DataType.DateTime)]
         public DateTime LastLogin { get; set; }
 
+        [Display(Name = "Дата online")]
+        [DataType(DataType.DateTime)]
+        public DateTime LastOnline { get; set; }
+
         [Display(Name = "IP входа")]
         public string LastIP { get; set; }
+
+        [Display(Name = "Token")]
+        public string AccessToken { get; set; }
 
         [Display(Name = "Ошибок")]
         public int FailCount { get; set; }
